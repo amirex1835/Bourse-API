@@ -25,7 +25,8 @@ for item in data:
     plp = item.get("plp", 0)   # درصد تغییر آخرین قیمت
     pc = item.get("pc", 0)     # قیمت پایانی
     tvol = item.get("tvol", 0) # حجم معاملات
-
+    if(item.get("Buy_CountI",0)>0 and item.get("Sell_I_Volume",0)>0 and item.get("Sell_CountI",0)>0 ):
+        power=(item.get("Buy_I_Volume",0)/item.get("Buy_CountI",0))/(item.get("Sell_I_Volume",0)/item.get("Sell_CountI",0))
     # تبدیل به float
     try:
         plc = float(plc)
@@ -47,10 +48,13 @@ for item in data:
     # فقط سهم‌های معامله شده
     if tvol <= 1000000:
         continue
-
+    if power<0.8:
+        continue
+    # if power<0.8:
+    #     continue
     if group_id not in groups:
         groups[group_id] = []
-    groups[group_id].append({"symbol": symbol, "plc": plc, "plp": plp, "pc": pc})
+    groups[group_id].append({"symbol": symbol, "plc": plc, "plp": plp, "pc": pc,"power":power})
 
 # 2. محاسبه میانگین و نمایش سهم‌ها بالاتر از میانگین
 count=0
@@ -70,6 +74,6 @@ for g, items in groups.items():
     print("Symbols above mean:")
     for it in above_mean:
         count+=1
-        print(f"Namad: {it['symbol']}, Last Change: {it['plc']}, Last % Change: {it['plp']}%, Close Price: {it['pc']}")
+        print(f"Namad: {it['symbol']} , Last % Change: {it['plp']}% , power : {round(it['power'],2)}")
     print("------")
 print(count)
