@@ -24,7 +24,7 @@ for item in data:
     if(item.get("Buy_CountI",0)>0 and item.get("Sell_I_Volume",0)>0 and item.get("Sell_CountI",0)>0 ):
         power=(item.get("Buy_I_Volume",0)/item.get("Buy_CountI",0))/(item.get("Sell_I_Volume",0)/item.get("Sell_CountI",0))
     # فقط سهم‌های معامله شده
-    if tvol <= 1000000 or power<4.8 or group_id == 68:
+    if tvol <= 1000000 or power<0.8 or group_id == 68:
         continue
     # if power<0.8:
     #     continue
