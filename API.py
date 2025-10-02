@@ -16,10 +16,6 @@ groups = {}
 for item in data:
     group_id = item.get("cs_id", "UNKNOWN")
     
-    # حذف گروه 68
-    if group_id == 68:
-        continue
-
     symbol = item.get("l18", "UNKNOWN")
     plc = item.get("plc", 0)   # تغییر آخرین قیمت
     plp = item.get("plp", 0)   # درصد تغییر آخرین قیمت
@@ -27,28 +23,8 @@ for item in data:
     tvol = item.get("tvol", 0) # حجم معاملات
     if(item.get("Buy_CountI",0)>0 and item.get("Sell_I_Volume",0)>0 and item.get("Sell_CountI",0)>0 ):
         power=(item.get("Buy_I_Volume",0)/item.get("Buy_CountI",0))/(item.get("Sell_I_Volume",0)/item.get("Sell_CountI",0))
-    # تبدیل به float
-    try:
-        plc = float(plc)
-    except:
-        plc = 0
-    try:
-        plp = float(plp)
-    except:
-        plp = 0
-    try:
-        pc = float(pc)
-    except:
-        pc = 0
-    try:
-        tvol = float(tvol)
-    except:
-        tvol = 0
-
     # فقط سهم‌های معامله شده
-    if tvol <= 1000000:
-        continue
-    if power<0.8:
+    if tvol <= 1000000 or power<4.8 or group_id == 68:
         continue
     # if power<0.8:
     #     continue
